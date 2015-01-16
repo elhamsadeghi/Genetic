@@ -1,13 +1,199 @@
 #include "OPDX.h"
-#include <fstream>
+#include <math.h>
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <algorithm>
+using std::string;
+using std::stold;
+using std::fmod;
 
-OPDX::OPDX()
-{
 
-}
 OPDX::~OPDX()
 {
+   
+}
+
+OPDX::OPDX(Interface *u, int pop, int gen, float mut, int geno, float cross)
+{
+    minimum->fit = -0.5231;
+}
+
+
+void OPDX::Run()
+{
+        InitialPopulation();
+
+
+            Fitness();
+            for(int i=1 ; i<= GENERATION_NUMBER ; i++)
+            {
+            Selection();
+            CrossOver();
+            Mutate();
+            Swap();
+        Fitness();
+        Best();
 
 }
+
+void OPDX::InitialPopulation()
+{
+
+    double random ;
+    random =dice.Double( 1,2000);
+    double n=random;
+    for(int i = 0; i < n; i++)
+    {
+        chro citizen;
+        double random;
+        random =dice.Double(1, 1000);
+        citizen.x = random ;
+        random=dice.Double(1, 1000);
+        citizen.y = random;
+
+
+
+        citizen.fit =-0.5231;
+        population.push_back(citizen);
+    }
+
+
+
+}
+
+void  OPDX::Fitness()
+{
+    double fitness = 0.0;
+    chro * citizen = new chro;
+    for(int i = 0; i < n; i++)
+    {
+            fitness=(0.5+(sin(pow(sqrt(pow(citizen->x ,2)+pow(citizen->y ,2)) ,2))/(1+(0.1*(pow(citizen->x ,2)+pow(citizen->y ,2))))));
+        citizen->fit = fitness;
+        fitness = 0.0;
+    }
+    citizen = nullptr;
+    delete citizen;
+}
+
+
+
+
+bool  OPDX::isFinished()
+{
+    return true;
+}
+
+void  OPDX::Selection()
+{
+    chro chro1, chro2;
+    chro selected;
+    for(int i = 0; i < n; i++)
+    {
+        chro1 = population[dice.Integer(0,n)];
+        chro2 = population[dice.Integer(0,n)];
+
+        if(chro1.fit < chro2.fit)
+        {
+                selected.fit = chro1.fit;
+                selected.x = chro1.x;
+                selected.y = chro1.y;
+            }else{
+                selected.fit = chro2.fit;
+                selected.x = chro2.x;
+                selected.y = chro2.y;
+            }
+
+        middle.push_back(selected);
+    }
+}
+
+
+
+
+
+void  OPDX::CrossOver()
+{
+
+    chro pa, pb, p1, p2, p3, p4;
+    for(int i = 0; i < n/2; i++) 
+    {
+        if(dice.Double(0,1) <= CROSSOVER_RATE)
+        {
+            
+        }
+    }
+}
+
+
+
+void  OPDX::Mutate()
+{ chro *citizen;
+    double random;
+    for(int i = 0; i <n/2 ; i++)
+    {
+        if( dice.Double(1,6) < MUTATION_RATE)
+        {
+            random = dice.Double(0,fmod(n ,2) );
+            citizen = &middle[i];
+            if((citizen->x + random > 100) &&  (citizen->x <1))
+            {
+                    citizen->x = fmod((citizen->x + random), 100.0) + 1;
+            }else{
+                citizen->x = citizen->x + random;
+            }
+            citizen->y=citizen->y;
+        }
+    }
+    citizen = nullptr;
+    delete citizen;
+
+
+}
+
+void  OPDX::Swap()
+{
+
+    chro* temp;
+    chro mid;
+    for(int i = 0; i < n; i++)
+    {
+        temp = &population[i];
+        mid = middle[i];
+        if(mid.fit<=temp->fit)
+    {
+        temp->x = mid.x;
+        temp->y = mid.y;
+        temp->fit = mid.fit;
+    }
+    }
+    temp = nullptr;
+    delete temp;
+
+}
+
+
+
+void  OPDX::Best()
+{
+ chro p;
+    chro min;
+    for(int i = 0; i < n; i++)
+    {
+        p = population[i];
+        if(min.fit > p.fit)
+        {
+            min.fit = p.fit;
+            min.x = p.x;
+            min.y = p.y;
+        }
+        if(minimum->fit > temp.fit)
+        {
+            minimum->fit = p.fit;
+            minimum->x = p.x;
+            minimum->y = p.y;
+        }
+    }
+}
+
+
