@@ -1,0 +1,13 @@
+#include "OPDX.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+
+OPDX::OPDX()
+{
+
+}
+OPDX::~OPDX()
+{
+
+}
